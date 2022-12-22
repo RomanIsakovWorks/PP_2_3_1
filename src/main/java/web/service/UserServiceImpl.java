@@ -14,72 +14,40 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService{
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
 
-    @Override
-    public List<User> listUsers() {
-        return userDao.listUsers();
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     @Override
-    public void add(User user) {
-        userDao.add(user);
+    @Transactional(readOnly = true)
+    public List<User> getListUsers() {
+        return userDao.getListUsers();
     }
 
     @Override
-    public void delete(int id) {
-        userDao.delete(id);
+    @Transactional
+    public void addUser(User user) {
+        userDao.addUser(user);
     }
 
     @Override
-    public void update(int id, User user) {
-        userDao.update(id, user);
+    @Transactional
+    public void deleteUser(int id) {
+        userDao.deleteUser(id);
     }
 
     @Override
+    @Transactional
+    public void updateUser(int id, User user) {
+        userDao.updateUser(id, user);
+    }
+
+    @Override
+    @Transactional
     public User getUser(int id) {
         return userDao.getUser(id);
     }
-
-
-//    @PersistenceContext
-//    private EntityManager entityManager;
-//
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<User> listUsers() {
-//        return entityManager.createQuery("from User").getResultList();
-//    }
-//
-//
-//    @Override
-//    @Transactional
-//    public void add(User user) {
-//        entityManager.persist(user);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void update(int id, User user) {
-//        User updatedUser = entityManager.find(User.class, id);
-//        updatedUser.setName(user.getName());
-//        updatedUser.setLastName(user.getLastName());
-//        updatedUser.setEmail(user.getEmail());
-//
-//        entityManager.merge(user);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public User getUser(int id) {
-//        return entityManager.find(User.class, id);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void delete(int id) {
-//        entityManager.remove(entityManager.find(User.class, id));
-//    }
 
 }
